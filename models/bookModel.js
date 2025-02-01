@@ -19,6 +19,7 @@ const bookSchema = mongoose.Schema(
       required: true, // Enforcing that a userId is required
       ref: 'User',  // Assuming you have a User model in your app
     },
+    
   },
   {
     timestamps: true, // Correct spelling for timestamps

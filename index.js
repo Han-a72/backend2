@@ -1,39 +1,32 @@
-import express from "express";// 
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import { PORT, mongoDBURL } from "./config.js";
 import bodyParser from 'body-parser';
 import booksRoute from "./routes/booksRoute.js";
-import authRoute from "./routes/authRoute.js"
+import authRoute from "./routes/authRoute.js";
 import { connectToDB } from "./db.config.js";
-const app = express();// we're calling our express function (module) or Initiate express app
+import dotenv from 'dotenv';
+import signupRouter from "./routes/signupRouter.js"; // Adjust path as needed
 
 
+dotenv.config(); // Load environment variables
 
-// MVC- architecture
+const app = express(); // Initialize express app
 
-
+// Middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors());
 app.use(cors({ origin: "http://localhost:5173" }));
-
-// GET- HTTP method
-
-// 200 - Status Code OK
-
-// "Welcome to Mern stack tutorial" - > response data
-
-
-/// http://localhost:4000/
-
-
-app.use("/",authRoute)
+app.use("/api", signupRouter);
+// Routes
+app.use("/", authRoute);
 app.use("/books", booksRoute);
 
+// Connect to the database
+connectToDB();
 
-connectToDB()
-
-  app.listen(PORT, () => {
-    console.log(`✅ App is listening on port: ${PORT}`);
-  });
+// Start the server
+app.listen(PORT, () => {
+  console.log(`✅ App is listening on port: ${PORT}`);
+});

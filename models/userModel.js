@@ -11,15 +11,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email:{
+  email: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
-  }
+  },
+  isActive: {
+    type: Boolean,
+    default: false, // Default to false until email is confirmed
+  },
+  verificationToken: { type: String }
 });
 
-userSchema.methods.comparePassword = function (password) {
-  return bcrypt.compare(password, this.password);
-};
+const User = mongoose.model('User', userSchema);
 
-export const User = mongoose.model('User', userSchema);
+export default User; // Use default export
