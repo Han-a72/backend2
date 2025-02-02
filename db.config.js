@@ -1,17 +1,11 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-
-export const connectToDB=async()=>{
-
+// Connect to MongoDB using the URI from the environment variable
+export const connectToDB = async () => {
     try {
-     await mongoose.connect("mongodb+srv://hanaaman921:hana123@hana-cluster.8oo9n.mongodb.net/books-collection?retryWrites=true&w=majority")
-     console.log("database connected")
-
-        
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log("Database connected successfully!");
     } catch (error) {
-        
-        console.log(error)
+        console.log("Error connecting to the database:", error);
     }
-
-
-}
+};
