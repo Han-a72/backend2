@@ -21,6 +21,10 @@ app.use(cors({ origin: "http://localhost:5173",
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
  }));
+ app.get("/", (req, res) => {
+  res.send("Backend is working!");
+});
+
 app.use("/api", authRoute);
 // Routes
 // app.use("/", authRoute);
