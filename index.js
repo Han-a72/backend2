@@ -17,7 +17,7 @@ const app = express(); // Initialize express app
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors({ origin: "https://backend-io-eight.vercel.app",
+app.use(cors({ origin: "http://localhost:4000 ",
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
  }));
