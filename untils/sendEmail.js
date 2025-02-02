@@ -1,13 +1,11 @@
-
-
 import nodemailer from "nodemailer";
 
 // Configure the transporter for sending emails
 export const transporter = nodemailer.createTransport({
-  service: "Gmail", // You can change this to another email provider (e.g., Outlook)
+  service: "gmail", // Gmail service
   auth: {
-    user: process.env.EMAIL_USER, // Your email address
-    pass: process.env.EMAIL_PASS, // Your email password
+    user: process.env.EMAIL_USER, // Your email address from .env
+    pass: process.env.EMAIL_PASS, // Your App Password from .env
   },
 });
 
@@ -15,18 +13,17 @@ export const transporter = nodemailer.createTransport({
 export const sendEmail = async (to, subject, text, html) => {
   const mailOptions = {
     from: process.env.EMAIL_USER, // Sender's email
-    to, // Receiver's email
-    subject, // Email subject
-    text, // Plain text email content
-    html, // HTML email content (optional)
+    to: to, // Recipient's email
+    subject: subject, // Email subject
+    text: text, // Plain text content
+    html: html, // HTML content (optional)
   };
 
-  // Attempt to send the email
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${to}`);
+    console.log(`Email sent successfully to ${to}`);
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending email:", error.message);
     throw new Error("Email could not be sent");
   }
 };
