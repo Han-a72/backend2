@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import User from '../models/userModel.js'; // Make sure this file exists and the model is set correctly
-
+import { authLists } from "../controllers/authcontroller.js";
 const router = express.Router();
 
 // Helper Function to Generate JWT
@@ -16,7 +16,7 @@ const generateToken = (userId) => {
 
 // Helper Function to Send Verification Email
 const sendVerificationEmail = async (email, token) => {
-    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';  // Default to localhost if not set
+    const baseUrl = process.env.BASE_URL || '';  // Default to localhost if not set
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -121,6 +121,7 @@ router.post('/signin', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+router.post("/login", authLists);
 
 // Verify Email Endpoint
 router.get('/verify', async (req, res) => {

@@ -1,14 +1,12 @@
+// Import required modules
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { PORT, mongoDBURL } from "./config.js";
-import bodyParser from 'body-parser';
-import booksRoute from "./routes/booksRoute.js";
-// import authRoute from "./routes/authRoute.js";
-import { connectToDB } from "./db.config.js";
-import dotenv from 'dotenv';
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 import authRoute from "./routes/authRoute.js"; // Adjust path as needed
-// import { sendEmail } from "../backend/untils/sendEmail.js";
+import booksRoute from "./routes/booksRoute.js"; // Adjust path as needed
+import { connectToDB } from "./db.config.js"; // Adjust path as needed
 
 dotenv.config(); // Load environment variables
 
@@ -17,35 +15,46 @@ const app = express(); // Initialize express app
 // Middleware
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:4000 ",
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
- }));
- app.get("/", (req, res) => {
+
+// CORS Configuration
+const allowedOrigins = [
+  "http://localhost:5173",    // For local development
+  "http://localhost:4000",    // For testing other local origins
+  "https://backend-io-eight.vercel.app", // Your deployed frontend URL
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow requests from allowed origins
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Include cookies if required
+  })
+);
+
+// Default route to check if backend is working
+app.get("/", (req, res) => {
   res.send("Backend is working!");
 });
 
+// Handle POST requests to the root route
+app.post("/", (req, res) => {
+  res.status(200).json({ message: "Root POST route works!" });
+});
+
+// Use routes
 app.use("/api", authRoute);
-// Routes
-// app.use("/", authRoute);
 app.use("/books", booksRoute);
 
 // Connect to the database
 connectToDB();
-// app.get("/test-email", async (req, res) => {
-//   try {
-//     await sendEmail(
-//       "test@example.com", // Replace with your email to test
-//       "Test Email Subject",
-//       "This is a plain text test email.",
-//       "<p>This is an HTML test email.</p>"
-//     );
-//     res.status(200).send("Test email sent successfully!");
-//   } catch (error) {
-//     res.status(500).send(`Error: ${error.message}`);
-//   }
-// });
+
 // Start the server
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`✅ App is listening on port: ${PORT}`);
 });
