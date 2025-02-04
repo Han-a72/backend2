@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail = async (email, token) => {
-  const verificationUrl = `http://localhost:5174/confirmemail?token=${token}`;
+  const verificationUrl = `https://backend-io-eight.vercel.app/confirmemail?token=${token}`;
   const mailOptions = {
     from: `"Hna Test project" <${process.env.EMAIL_USER}>`,
     to: email,
