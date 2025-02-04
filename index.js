@@ -17,11 +17,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // CORS Configuration
-
-
-app.use(
-  cors()
-);
+app.use(cors());
 
 // Default route to check if backend is working
 app.get("/", (req, res) => {
@@ -34,7 +30,6 @@ app.post("/", (req, res) => {
 });
 
 // Use routes
-
 app.use("/api", authRoute);
 app.use("/books", booksRoute);
 
