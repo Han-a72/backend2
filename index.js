@@ -17,23 +17,10 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 // CORS Configuration
-const allowedOrigins = [
-  "http://localhost:5173",    // For local development
-  "http://localhost:4000",    // For testing other local origins
-  "https://backend-io-eight.vercel.app", // Your deployed frontend URL
-];
+
 
 app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Allow requests from allowed origins
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // Include cookies if required
-  })
+  cors()
 );
 
 // Default route to check if backend is working
