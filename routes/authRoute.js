@@ -7,30 +7,30 @@ const router = express.Router();
 
 // Register user and send verification email
 router.post("/register", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Create a new user
-    const user = new User({ email, password });
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    user.verificationToken = token;
-
-    await user.save();
-
-    // Log the token for debugging
-    console.log("Generated Token:", token);
-
-    // Send verification email
-    const verificationLink = `https://your-frontend-url.com/ConfirmEmail?token=${token}`;
-    console.log("Verification Link:", verificationLink);
-
-    res.status(201).json({ message: "User registered successfully. Check your email for verification." });
-  } catch (error) {
-    console.error("Error during registration:", error.message);
-    res.status(500).json({ message: "Server error. Please try again later." });
-  }
-});
-
+    try {
+      const { email, password } = req.body;
+      console.log("Request Body:", req.body);
+  
+      const user = new User({ email, password });
+      console.log("New User Object:", user);
+  
+      const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      console.log("Generated Token:", token);
+  
+      user.verificationToken = token;
+      await user.save();
+      console.log("User saved:", user);
+  
+      const verificationLink = `https://your-frontend-url.com/ConfirmEmail?token=${token}`;
+      console.log("Verification Link:", verificationLink);
+  
+      res.status(201).json({ message: "User registered successfully. Check your email for verification.", token });
+    } catch (error) {
+      console.error("Error during registration:", error.message);
+      res.status(500).json({ message: "Server error. Please try again later." });
+    }
+  });
+  
 // Verify email
 router.get("/verify", async (req, res) => {
   const { token } = req.query;
